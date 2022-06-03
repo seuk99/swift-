@@ -2,8 +2,8 @@
 
 import UIKit
 
-var items = ["책 구매", "철수와 약속", "스터디 준비하기"]
-var itemsImageFile = ["cart.jpeg", "clock.jpeg", "pencil.jpeg"]
+var items = ["책 구매", "철수와 약속", "스터디 준비하기"] //외부변수인 items의 내용을 각각 지정//
+var itemsImageFile = ["cart.jpeg", "clock.jpeg", "pencil.jpeg"] //외부변수인 이미지파일을 설정//
 
 class TableViewController: UITableViewController {
 
@@ -11,39 +11,28 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.navigationItem.leftBarButtonItem = self.editButtonItem
     }
-    
+    //뷰가 노출될 때마다 리스트의 데이터를 다시 불러온다//
     override func viewWillAppear(_ animated: Bool) {
         tvListView.reloadData()
     }
 
-    // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 1 //보통 테이블 안에 섹션이 하나이므로 리턴값을 1로 한다//
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return items.count
+        return items.count //섹션당 열의 개수는 items의 개수//
     }
 
-    
+    //items와 itemsImageFile의 값을 셀에 삽입//
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
         
-        cell.textLabel?.text = items[(indexPath as NSIndexPath).row]
-        cell.imageView?.image = UIImage(named: itemsImageFile[(indexPath as NSIndexPath).row])
-
-        // Configure the cell...
-
+        cell.textLabel?.text = items[(indexPath as NSIndexPath).row] //셀의 텍스트 레이블 앞에서 선언한 items을 대입//
+        cell.imageView?.image = UIImage(named: itemsImageFile[(indexPath as NSIndexPath).row]) //셀의 이미지 뷰에 앞에서 선언한 파일을 대입//
+        
         return cell
     }
 
@@ -55,34 +44,30 @@ class TableViewController: UITableViewController {
         return true
     }
     */
-
     
-    // Override to support editing the table view.
+    //목록삭제함수//
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
             items.remove(at: (indexPath as NSIndexPath).row)
             itemsImageFile.remove(at: (indexPath as NSIndexPath).row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        
         }    
     }
-    
+    //삭제시 delete대신 삭제로 표시하기//
     override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
         return "삭제"
     }
 
-
-    
-    // Override to support rearranging the table view.
+    //목록의 순서 변경//
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-        let itemToMove = items[(fromIndexPath as NSIndexPath).row]
-        let itemImageToMove = itemsImageFile[(fromIndexPath as NSIndexPath).row]
-        items.remove(at: (fromIndexPath as NSIndexPath).row)
-        itemsImageFile.remove(at: (fromIndexPath as NSIndexPath).row)
-        items.insert(itemToMove, at: (to as NSIndexPath).row)
-        itemsImageFile.insert(itemImageToMove, at: (to as NSIndexPath).row)
+        let itemToMove = items[(fromIndexPath as NSIndexPath).row] //이동할 아이템의 위치를 itemToMove에 저장//
+        let itemImageToMove = itemsImageFile[(fromIndexPath as NSIndexPath).row] //이동할 아이템의 이미지를 itemImageMove에 저장// 
+        items.remove(at: (fromIndexPath as NSIndexPath).row) //이동할 아이템을 삭제 아이템들의 인덱스가 재정렬됨//
+        itemsImageFile.remove(at: (fromIndexPath as NSIndexPath).row) //이동할 아이템의 이미지를 삭제 이미지들의 인덱스 재정렬됨//
+        items.insert(itemToMove, at: (to as NSIndexPath).row) //삭제한 아이템을 이동할 위치로 삽입//
+        itemsImageFile.insert(itemImageToMove, at: (to as NSIndexPath).row) //삭제된 아이템의 이미지르 이동할 위치로 삽입//
 
     }
 
@@ -95,13 +80,7 @@ class TableViewController: UITableViewController {
     }
     */
 
-    
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
         if segue.identifier == "sgDetail" {
             let cell = sender as! UITableViewCell
             let indexPath = self.tvListView.indexPath(for: cell)
@@ -122,15 +101,14 @@ class AddViewController: UIViewController {
     @IBOutlet var tfAddItem: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
-    
+    //새목록 추가//
     @IBAction func btnAddItem(_ sender: UIButton) {
-        items.append(tfAddItem.text!)
-        itemsImageFile.append("clock.jpeg")
-        tfAddItem.text = ""
-        _ = navigationController?.popViewController(animated: true)
+        items.append(tfAddItem.text!) //items에 텍스트 필드의 텍스트값을 추가//
+        itemsImageFile.append("clock.jpeg") 
+        tfAddItem.text = "" //텍스트 필드의 내용을 지운다//
+        _ = navigationController?.popViewController(animated: true) //루트 뷰 컨트롤러 테이블뷰로 돌아간다//
     }
     
     /*
@@ -151,9 +129,9 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
-    var receiveItem = ""
+    var receiveItem = "" //변수 선언//
 
-    @IBOutlet var lblItem: UILabel!
+    @IBOutlet var lblItem: UILabel! //뷰가 노출될 때마다 이 내용을 레이블의 텍스트로 표시//
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -161,7 +139,7 @@ class DetailViewController: UIViewController {
         lblItem.text = receiveItem
     }
     
-    func receiveItem(_ item: String)
+    func receiveItem(_ item: String) //MainView에서 변수를 받기 위한 함수를 추가//
     {
         receiveItem = item
     }
